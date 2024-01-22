@@ -45,6 +45,18 @@
    alive: true,
  };
 
+ //Henter inn navnene til tilleggsfunksjonalitet nr.1
+
+ const healerNameElement = document.querySelector('#healer-name-txt');
+healerNameElement.textContent = heroesArray[0].name;
+const archerNameElement = document.querySelector('#archer-name-txt');
+archerNameElement.textContent = heroesArray[1].name;
+const warriorNameElement = document.querySelector('#warrior-name-txt');
+warriorNameElement.textContent = heroesArray[2].name;
+const dragonNameElement = document.querySelector('#dragon-name-txt');
+dragonNameElement.textContent = dragonObject.name;
+
+
  function attackDragon(hero) {
    if (dragonObject.alive && hero.alive) {
      dragonObject.currentHP -= hero.damage;
@@ -65,27 +77,33 @@
  function updateHealthBar(character) {
    let healthBar;
    let healthText;
- 
+   let nameText;
+   
    if (character === dragonObject) {
      healthBar = document.querySelector('.dragon-health');
-     healthText = document.querySelector('#dragon-name-txt');
+     healthText = document.querySelector('.dragon-health-txt');
    } else if (character.id === 0) {
      healthBar = document.querySelector('.healer-health');
-     healthText = document.querySelector('#healer-health-txt');
+     healthText = document.querySelector('.healer-health-txt');
    } else if (character.id === 1) {
      healthBar = document.querySelector('.archer-health');
-     healthText = document.querySelector('#archer-health-txt');
+     healthText = document.querySelector('.archer-health-txt');
    } else if (character.id === 2) {
      healthBar = document.querySelector('.warrior-health');
-     healthText = document.querySelector('#warrior-health-txt');
+     healthText = document.querySelector('.warrior-health-txt');
    }
- 
+   
    const healthPercentage = (character.currentHP / character.maxHP) * 100;
    healthBar.style.width = healthPercentage + '%';
  
-   // Oppdaterer helse-tallene
+   // Oppdaterer helse-teksten
    if (healthText) {
      healthText.textContent = `${character.currentHP} / ${character.maxHP} HP`;
+   }
+   
+   // Oppdaterer navnet
+   if (nameText) {
+     nameText.textContent = character.name;
    }
  }
  
