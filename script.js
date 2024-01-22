@@ -48,7 +48,7 @@
  function attackDragon(hero) {
    if (dragonObject.alive && hero.alive) {
      dragonObject.currentHP -= hero.damage;
-     console.log(`${hero.name} har gjort ${hero.damage} skade på ${dragonObject.name}!`);
+     alert(`${hero.name} har gjort ${hero.damage} skade på ${dragonObject.name}!`);
      updateHealthBar(dragonObject);
  
      if (dragonObject.currentHP <= 0) {
@@ -57,36 +57,72 @@
        updateHealthBar(dragonObject);
        alert(`Gratulerer! Du har beseiret dragen og vunnet spillet!`);
      } else {
-       dragonAttacks(); // Kall dragenAttacks for motangrep
+       dragonAttacks(); 
      }
    }
  }
 
- function updateHealthBar(){
-   
+ function updateHealthBar(character) {
+   let healthBar;
+   let healthText;
+ 
+   if (character === dragonObject) {
+     healthBar = document.querySelector('.dragon-health');
+     healthText = document.querySelector('#dragon-name-txt');
+   } else if (character.id === 0) {
+     healthBar = document.querySelector('.healer-health');
+     healthText = document.querySelector('#healer-health-txt');
+   } else if (character.id === 1) {
+     healthBar = document.querySelector('.archer-health');
+     healthText = document.querySelector('#archer-health-txt');
+   } else if (character.id === 2) {
+     healthBar = document.querySelector('.warrior-health');
+     healthText = document.querySelector('#warrior-health-txt');
+   }
+ 
+   const healthPercentage = (character.currentHP / character.maxHP) * 100;
+   healthBar.style.width = healthPercentage + '%';
+ 
+   // Oppdaterer helse-tallene
+   if (healthText) {
+     healthText.textContent = `${character.currentHP} / ${character.maxHP} HP`;
+   }
  }
  
+ 
+ 
+ 
 
- function dragonAttacks(){
-   if(dragonObject.alive){
-      let livingHeroes = heroesArray.filter(hero => hero.alive);
-      if (livingHeroes.length > 0) {
-         let randomIndex = Math.floor(Math.random() * livingHeroes.length);
-         let targetHero = livingHeroes[randomIndex];
-
-         //Dragen angriper tilfeldig karakter
-         console.log(`${dragonObject.name} har angrepet ${targetHero}`);
+ function dragonAttacks() {
+   if (dragonObject.alive) {
+     let livingHeroes = heroesArray.filter(hero => hero.alive);
+     if (livingHeroes.length > 0) {
+       let randomIndex = Math.floor(Math.random() * livingHeroes.length);
+       let targetHero = livingHeroes[randomIndex];
+ 
+       // Dragen angriper tilfeldig karakter
+       targetHero.currentHP -= dragonObject.damage;
+       alert(`${dragonObject.name} har angrepet ${targetHero.name}!`);
+       updateHealthBar(targetHero);
+ 
+       if (targetHero.currentHP <= 0) {
+         targetHero.alive = false;
+         targetHero.currentHP = 0;
          updateHealthBar(targetHero);
+         checkGameOver();
+       }
+     }
+     if (!heroesArray.some(hero => hero.alive)) {
+       alert(`Spillet er tapt! ${dragonObject.name} har vunnet!`);
+     }
+   }
+ }
+ 
+ 
 
-         if(targetHero-currentHP <= 0){
-            targetHero.alive = false;
-            targetHero.currentHP = 0;
-            updateHealthBar(targetHero);
-            checkGameOver();
-         }
-      }
-      if(!heroesArray.some(hero => hero.alive)){
-         alert(`Spillet er tapt! ${dragonObject.name} har vunnet!`)
-      }
+ function checkGameOver() {
+   if (heroesArray.every(hero => !hero.alive) && dragonObject.currentHP > 0) {
+     // Spillet er tapt
+     alert(`Spillet er tapt! ${dragonObject.name} har vunnet!`);
    }
  }
