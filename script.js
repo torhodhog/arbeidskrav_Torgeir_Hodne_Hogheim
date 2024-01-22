@@ -35,3 +35,52 @@
          damage: 200,
          alive: true,
        };
+
+       //Spillfunksjoner 
+       function heroAttacks(){
+         if(heroAttacks.alive && dragonObject.alive){
+            dragonObject.currentHP -= hero.damage;
+            updateHelthBar(dragonObject);
+            checkDragonHelth();
+            dragonAttacks();
+         }
+       } 
+
+
+
+       
+       function updateHelthBar(character){
+         //Oppdaterer helsen til karakteren
+       }
+         //Funksjon for hvis dragen dør.
+       function checkDragonHelth(){
+         if(dragonObject.currentHP <= 0){
+            dragonObject.alive = false;
+         }
+       }
+
+       //Dragens motangrep
+       function dragonAttacks(){
+         let livingHeroes = heroesArray.filter(hero => hero.alive);
+         if(livingHeroes.length > 0){
+            let randomIndex = Math.floor(Math.random() * livingHeroes.length);
+            let targetHero = livingHeroes[randomIndex];
+            targetHero.currentHP -= dragonObject.damage;
+            updateHelthBar(targetHero);
+            checkHeroHelth(targetHero);
+         }
+       }
+
+       function checkHeroHelth(hero){
+         if(hero.currentHP <= 0){
+            hero.alive = false;
+            heroDies(hero);
+            checkGameOver();
+         }
+       }
+
+       function checkGameOver(){
+         if(heroesArray.every(hero => !hero.alive)){
+            alert("Spillet er over, dragen vant!")
+         }
+       }
