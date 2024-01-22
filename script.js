@@ -1,6 +1,5 @@
  document.querySelector('.healer').addEventListener('click', function (){
    attackDragon(heroesArray[0]);
-   console.log("Du klikket på Henriette")
  })
  document.querySelector('.archer').addEventListener('click', function(){
    attackDragon(heroesArray[1]);
@@ -57,22 +56,22 @@ const dragonNameElement = document.querySelector('#dragon-name-txt');
 dragonNameElement.textContent = dragonObject.name;
 
 
- function attackDragon(hero) {
+function attackDragon(hero) {
    if (dragonObject.alive && hero.alive) {
      dragonObject.currentHP -= hero.damage;
      alert(`${hero.name} har gjort ${hero.damage} skade på ${dragonObject.name}!`);
      updateHealthBar(dragonObject);
- 
+
      if (dragonObject.currentHP <= 0) {
        dragonObject.alive = false;
        dragonObject.currentHP = 0;
        updateHealthBar(dragonObject);
        alert(`Gratulerer! Du har beseiret dragen og vunnet spillet!`);
      } else {
-       dragonAttacks(); 
+       dragonAttacks(hero); // Send karakteren som argument
      }
    }
- }
+}
 
  function updateHealthBar(character) {
    let healthBar;
@@ -113,28 +112,25 @@ dragonNameElement.textContent = dragonObject.name;
 
  function dragonAttacks() {
    if (dragonObject.alive) {
-     let livingHeroes = heroesArray.filter(hero => hero.alive);
-     if (livingHeroes.length > 0) {
-       let randomIndex = Math.floor(Math.random() * livingHeroes.length);
-       let targetHero = livingHeroes[randomIndex];
- 
-       // Dragen angriper tilfeldig karakter
-       targetHero.currentHP -= dragonObject.damage;
-       alert(`${dragonObject.name} har angrepet ${targetHero.name}!`);
-       updateHealthBar(targetHero);
- 
-       if (targetHero.currentHP <= 0) {
-         targetHero.alive = false;
-         targetHero.currentHP = 0;
-         updateHealthBar(targetHero);
-         checkGameOver();
+     const randomHero = heroesArray[Math.floor(Math.random() * heroesArray.length)];
+     if (randomHero.alive) {
+       randomHero.currentHP -= 200; // Dragen gjør alltid 200 skade
+       alert(`${dragonObject.name} har gjort 200 skade på ${randomHero.name}!`);
+       updateHealthBar(randomHero); // Oppdater helsefeltet for karakteren
+
+       if (randomHero.currentHP <= 0) {
+         randomHero.alive = false;
+         randomHero.currentHP = 0;
+         alert(`${randomHero.name} har blitt beseiret av dragen!`);
        }
      }
-     if (!heroesArray.some(hero => hero.alive)) {
-       alert(`Spillet er tapt! ${dragonObject.name} har vunnet!`);
-     }
    }
- }
+   updateHealthBar(dragonObject); // Oppdater dragens helsefelt
+}
+
+
+
+
  
  
 
