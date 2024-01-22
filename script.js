@@ -1,5 +1,12 @@
- 
- 
+ document.querySelector('.healer').addEventListener('click', function (){
+   attackDragon(heroesArray[0]);
+ })
+ document.querySelector('.archer').addEventListener('click', function(){
+   attackDragon(heroesArray[1]);
+ })
+ document.querySelector('.warrior').addEventListener('click', function(){
+   attackDragon(heroesArray[2]);
+ })
  
  //Stats for heroes
   let heroesArray = [
