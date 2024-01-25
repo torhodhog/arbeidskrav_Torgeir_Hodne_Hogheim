@@ -1,15 +1,3 @@
-// Fikser event listeners syntaks
-document.querySelector('.healer').addEventListener('click', function() {
-  attackDragon(heroesArray[0]);
-});
-document.querySelector('.archer').addEventListener('click', function() {
-  attackDragon(heroesArray[1]);
-});
-document.querySelector('.warrior').addEventListener('click', function() {
-  attackDragon(heroesArray[2]);
-});
-
-
 let heroesArray = [
   {
     id: 0,
@@ -45,51 +33,52 @@ let dragonObject = {
   alive: true,
 };
 
+// Oppdaterer navn og HP for hver helt
+heroesArray.forEach(hero => {
+  document.getElementById(`${hero.name.toLowerCase().split(' ')[1]}-name-txt`).textContent = hero.name;
+  document.getElementById(`${hero.name.toLowerCase().split(' ')[1]}-health-txt`).textContent = `${hero.currentHP} / ${hero.maxHP} HP`;
+});
 
-// Definerer variabler for hver helts helsestatus-element
-const healerHealthText = document.getElementById('healer-health-txt');
-const archerHealthText = document.getElementById('archer-health-txt');
-const warriorHealthText = document.getElementById('warrior-health-txt');
-
-// Variabel for dragens helsestatus-element
-const dragonHealthText = document.getElementById('dragon-health-txt');
-
-function updateCurrentHP(character) {
-  let healthTextElement;
-  
-  if (character === dragonObject) {
-    healthTextElement = dragonHealthText;
-  } else {
-    switch (character.id) {
-      case 0:
-        healthTextElement = healerHealthText;
-        break;
-      case 1:
-        healthTextElement = archerHealthText;
-        break;
-      case 2:
-        healthTextElement = warriorHealthText;
-        break;
-    }
-  }
-
-  if (healthTextElement) {
-    healthTextElement.textContent = `${character.currentHP} / ${character.maxHP} HP`;
-  }
-} 
-
+// Oppdaterer navn og HP for dragen
+document.getElementById('dragon-name-txt').textContent = dragonObject.name;
+document.getElementById('dragon-health-txt').textContent = `${dragonObject.currentHP} / ${dragonObject.maxHP} HP`;
 
 function attackDragon(hero) {
-  if (dragonObject.alive && hero.alive) {
-    dragonObject.currentHP = Math.max(0, dragonObject.currentHP - hero.damage);
-    alert(`${hero.name} har gjort ${hero.damage} skade på ${dragonObject.name}!`);
-    updateCurrentHP(dragonObject);
-    dragonAttacks()
-
-    if (dragonObject.currentHP <= 0) {
-      dragonObject.alive = false;
-      alert(`${dragonObject.name} er død! Gratulerer, du har vunnet spillet!`);
-    }
+  if (!dragonObject.alive) {
+    alert('Dragen er allerede død!');
+    return;
   }
+
+  dragonObject.currentHP -= hero.damage;
+  if (dragonObject.currentHP <= 0) {
+    dragonObject.currentHP = 0;
+    dragonObject.alive = false;
+    alert(`${hero.name} drepte dragen!`);
+  } else {
+    alert(`${hero.name} gjorde ${hero.damage} skade!`);
+  }
+
+  document.getElementById('dragon-health-txt').textContent = `${dragonObject.currentHP} / ${dragonObject.maxHP} HP`;
+  dragonAttack();
 }
 
+function dragonAttack() {
+  const aliveHeroes = heroesArray.filter(hero => hero.alive);
+  if (aliveHeroes.length === 0) {
+    alert("Alle helter er døde! Spillet er over.");
+    return;
+  }
+
+  const randomHero = aliveHeroes[Math.floor(Math.random() * aliveHeroes.length)];
+
+  randomHero.currentHP -= dragonObject.damage;
+  if (randomHero.currentHP <= 0) {
+    randomHero.currentHP = 0;
+    randomHero.alive = false;
+    alert(`Dragen angrep ${randomHero.name} og drepte dem!`);
+  } else {
+    alert(`Dragen angrep ${randomHero.name} og gjorde ${dragonObject.damage} skade!`);
+  }
+
+  document.getElementById(`${randomHero.name.toLowerCase().split(' ')[1]}-health-txt`).textContent = `${randomHero.currentHP} / ${randomHero.maxHP} HP`;
+}
