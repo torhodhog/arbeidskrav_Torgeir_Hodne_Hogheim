@@ -43,42 +43,11 @@ heroesArray.forEach(hero => {
 document.getElementById('dragon-name-txt').textContent = dragonObject.name;
 document.getElementById('dragon-health-txt').textContent = `${dragonObject.currentHP} / ${dragonObject.maxHP} HP`;
 
-function attackDragon(hero) {
-  if (!dragonObject.alive) {
-    alert('Dragen er allerede død!');
-    return;
-  }
-
+function attackDragon(hero){
   dragonObject.currentHP -= hero.damage;
-  if (dragonObject.currentHP <= 0) {
-    dragonObject.currentHP = 0;
+  if(dragonObject.currentHP <= 0){
     dragonObject.alive = false;
-    alert(`${hero.name} drepte dragen!`);
   } else {
-    alert(`${hero.name} gjorde ${hero.damage} skade!`);
-  }
-
-  document.getElementById('dragon-health-txt').textContent = `${dragonObject.currentHP} / ${dragonObject.maxHP} HP`;
-  dragonAttack();
-}
-
-function dragonAttack() {
-  const aliveHeroes = heroesArray.filter(hero => hero.alive);
-  if (aliveHeroes.length === 0) {
-    alert("Alle helter er døde! Spillet er over.");
-    return;
-  }
-
-  const randomHero = aliveHeroes[Math.floor(Math.random() * aliveHeroes.length)];
-
-  randomHero.currentHP -= dragonObject.damage;
-  if (randomHero.currentHP <= 0) {
-    randomHero.currentHP = 0;
-    randomHero.alive = false;
-    alert(`Dragen angrep ${randomHero.name} og drepte dem!`);
-  } else {
-    alert(`Dragen angrep ${randomHero.name} og gjorde ${dragonObject.damage} skade!`);
-  }
-
-  document.getElementById(`${randomHero.name.toLowerCase().split(' ')[1]}-health-txt`).textContent = `${randomHero.currentHP} / ${randomHero.maxHP} HP`;
+    alert(`${hero.name} attacked ${dragonObject.name} for ${hero.damage} damage!`);
+  } dragonAttack(hero);
 }
