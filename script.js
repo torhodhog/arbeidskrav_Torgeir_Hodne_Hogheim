@@ -34,7 +34,7 @@ let dragonObject = {
 };
 
 
-// Oppdaterer karakterenes navn og HP, hentet fra arrayet og objektet
+// Oppdaterer karakterenes navn og HP, hentet fra arrayet
 function updateCharacterDisplay() {
   heroesArray.forEach(hero => {
     const heroClass = hero.name.split(" ")[1].toLowerCase();
@@ -42,13 +42,13 @@ function updateCharacterDisplay() {
     document.getElementById(`${heroClass}-health-txt`).textContent = `${hero.currentHP} / ${hero.maxHP} HP`;
 
     if (!hero.alive) {
-      document.querySelector(`.${heroClass}`).style.display = 'none';
+      document.querySelector(`.${heroClass}`).style.display = 'none'; //Denne tok lang tid å finne ut av
     }
   });
 
-  // Oppdaterer dragens HP
+  // Oppdaterer dragens navn og HP, hentet fra objektet
   document.getElementById('dragon-name-txt').textContent = dragonObject.name;
-  let dragonHealthElements = document.getElementsByClassName('dragon-health-txt');
+  let dragonHealthElements = document.getElementsByClassName('dragon-health-txt'); //Antok at dette var Id i HTML og måtte grave enormt dypt for å finne ut av dette.
   if (dragonHealthElements.length > 0) {
     dragonHealthElements[0].textContent = `${dragonObject.currentHP} / ${dragonObject.maxHP} HP`;
   }
