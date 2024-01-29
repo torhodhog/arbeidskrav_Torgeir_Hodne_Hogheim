@@ -37,24 +37,24 @@ let dragonObject = {
 // Oppdaterer karakterenes navn og HP, hentet fra arrayet
 function updateCharacterDisplay() {
   heroesArray.forEach(hero => {
-    const heroClass = hero.name.split(" ")[1].toLowerCase();
-    document.getElementById(`${heroClass}-name-txt`).textContent = hero.name;
-    document.getElementById(`${heroClass}-health-txt`).textContent = `${hero.currentHP} / ${hero.maxHP} HP`;
+    const heroClass = hero.name.split(" ")[1].toLowerCase(); // heroClass blir f.eks. "healer" eller "archer" eller "warrior" basert på navnet til helten.
+    document.getElementById(`${heroClass}-name-txt`).textContent = hero.name; // navnet på helten blir oppdatert
+    document.getElementById(`${heroClass}-health-txt`).textContent = `${hero.currentHP} / ${hero.maxHP} HP`; // HP på helten blir oppdatert
 
     if (!hero.alive) {
-      document.querySelector(`.${heroClass}`).style.display = 'none'; //Denne tok lang tid å finne ut av
+      document.querySelector(`.${heroClass}`).style.display = 'none'; //Denne tok lang tid å finne ut av. Her fjernes helten fra skjermen når den dør.
     }
   });
 
   // Oppdaterer dragens navn og HP, hentet fra objektet
-  document.getElementById('dragon-name-txt').textContent = dragonObject.name;
+  document.getElementById('dragon-name-txt').textContent = dragonObject.name; // navnet på dragen blir oppdatert. Dette skjer fordi det er en id i HTML.
   let dragonHealthElements = document.getElementsByClassName('dragon-health-txt'); //Antok at dette var Id i HTML og måtte grave enormt dypt for å finne ut av dette.
   if (dragonHealthElements.length > 0) {
-    dragonHealthElements[0].textContent = `${dragonObject.currentHP} / ${dragonObject.maxHP} HP`;
+    dragonHealthElements[0].textContent = `${dragonObject.currentHP} / ${dragonObject.maxHP} HP`; // Oppdarerer i forhold til første element som matcher klassenavnet "Dragon-health-txt"
   }
 
   if (!dragonObject.alive) {
-    document.querySelector('.dragon-container').style.display = 'none';
+    document.querySelector('.dragon-container').style.display = 'none';// fjerner om daragon er død
     alert("Spillet er vunnet!");
   }
 }
@@ -63,9 +63,9 @@ function updateCharacterDisplay() {
 //Funksjonen hvor helten angriper dragen
 function heroAttack(heroId) {
   let hero = heroesArray.find(h => h.id === heroId);
-  dragonObject.currentHP -= hero.damage;
+  dragonObject.currentHP -= hero.damage; //Knotet lenge med kun - her.
 
-  if (dragonObject.currentHP <= 0) {
+  if (dragonObject.currentHP <= 0) { //hvis dragen dør så skal den ikke kunne angripe igjen og spillet er vunnet.
     dragonObject.currentHP = 0;
     dragonObject.alive = false;
     updateCharacterDisplay();
@@ -102,7 +102,7 @@ function dragonAttack() {
 
 // Legger til event listeners for heltebilder
 document.querySelectorAll('.hero').forEach((element, index) => {
-  element.addEventListener('click', () => heroAttack(index));
+  element.addEventListener('click', () => heroAttack(index)); // Kun heltene skal klikkes på, så her la jeg eventlistener på klassen hero.
 });
 
 // Oppdatering av karakterenes navn og HP
